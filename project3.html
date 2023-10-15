@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My ePortfolio</h1>
+    </header>
+    
+   <section id="project3">
+        <h2>Artifact 3</h2>
+	<h3>Narrative</h3>
+	<p>This artifact is a revised version of the final project from DAD-220:
+	Introduction to Structured Database Environments, which I took back in 19EW6.
+	This course was my first experience with SQL. The original project featured a
+	MySql database named 'messaging' with three tables designed around athletes
+	from diverse sports. The schema interconnected athletes using various IDs and
+	linked them to images using other IDs, forming a cohesive data display through
+	multiple queries.</p>
+	
+	<p>Given that DAD-220 inherently revolved around database projects, it was a
+	natural choice for enhancement. While the original deliverable was a word document,
+	comprising narratives and screenshots, this version needed a working database
+	made from scratch. The former schema, with it's message_ids, contact_ids, and
+	connection_ids, felt confused and unclear. So, I remade the schema to better go
+	with the athletic theme, introducing distinct tables for sport types, teams, and
+	athletes.</p>
+	
+	<p>Enhancing this artfact posed initial challenges. Starting with the oringal schema,
+	it was clear that it's complexity would confuse users who without a intricate
+	explanation. This prompted the change to the new, user-friendly schema. While
+	recreating the database from scratch, I had a difficult time deciding what I should
+	include and exclude, such as whether to include the full range of CRUD operations.
+	I settled on a streamlined script that creates and populates the database and then
+	demonstrates a few sample queries for demonstration purposes.</p>
+
+	<strong>Course Outcome 1: You EmployED strategies for building collaborative environments
+	 that enable diverse audiences to support organizational decision-making in the field of
+	 computer science by completing the following enhancements</strong>
+	
+	<p>Artifact three aligns with building collaborative environments by using the portablitiy
+	of SqLite within the scalability of Python.</p>
+
+	<strong>Course Outcome 2: You DesignED, DevelopED, and DeliverED professional-quality oral,
+	 written, and visual communications that are coherent, technically sound, and appropriately
+	 adapted to specific audiences and contexts by completing the following enhancements</strong>
+	
+	<p>Artifact three aligns with quality of communication by providing immediate feedback
+	through console outputs for actions like user creation, clearly defined database
+	schema and code relationships, and extensive commenting, including header and DocStrings.</p>
+
+	<strong>Course Outcome 4: You DemonstrateD an ability to use well-founded and innovative techniques,
+	 skills, and tools in computing practices for the purpose of implementing computer solutions that
+	 deliver value and accomplish industry-specific goals by completing the following enhancements</strong>
+	
+	<p>Artifact three aligns with innovative techniques, skills and implementaion by
+	SqLite explicit table creation, sample data insertion, data reset, all executed within a
+	Python code structure.</p>
+
+	<strong>Course Outcome 5: You DevelopED a security mindset that anticipates adversarial exploits in
+	 software architecture and designs to expose potential vulnerabilities, mitigate design flaws, and
+	 ensure privacy and enhanced security of data and resources by completing the following enhancements</strong>
+	
+	<p>Artifact three aligns with a security mindset by using the bcrypt module to hash passwords
+	in the scripts authentication system.</p>
+
+	<div class="code">
+            <h3>Original Code</h3>
+            <pre><code>
+INSERT INTO person (first_name, last_name)
+VALUES (“Dave, “Lewellen”);
+
+ALTER TABLE messaging.person ADD age INT(3) NOT NULL;
+
+UPDATE person
+SET age = 40
+WHERE first_name = “Dave”;
+
+UPDATE person
+SET age = 40
+WHERE first_name = 'Dave';
+
+DELETE FROM messaging.person
+WHERE
+first_name = “Diana” AND last_name = “Taurasi”;
+
+DELETE FROM messaging.person
+WHERE
+first_name = 'Diana' AND last_name = 'Taurasi';
+
+
+ALTER TABLE messaging.contact_list ADD favorite VARCHAR(10);
+
+UPDATE contact_list
+SET
+contact_id = 1,
+favorite = “y”;
+UPDATE contact_list
+SET
+contact_id = 1,
+favorite = 'y';
+
+UPDATE contact_list
+SET
+Favorite = “n”
+where person_id <> 1;
+
+UPDATE contact_list
+SET
+Favorite = 'n'
+WHERE person_id <> 1;
+
+INSERT INTO contact_list (person_id, contact_id, favorite)
+VALUES
+(7, 1, “n”),
+(2, 1, “n”),
+(3, 1, “y”);
+
+INSERT INTO contact_list (person_id, contact_id, favorite)
+VALUES
+(7, 1, 'n'),
+(2, 1, 'n'),
+(3, 1, 'y');
+
+CREATE TABLE image (
+Image_id INT(8) NOT NULL AUTO_INCREMENT,
+Image_name VARCHAR(50) NOT NULL,
+Image_location VARCHAR(250) NOT NULL,
+PRIMARY KEY (image_id)
+) AUTO_INCREMENT = 1;
+
+CREATE TABLE image (
+    Image_id INT(8) NOT NULL AUTO_INCREMENT,
+    Image_name VARCHAR(50) NOT NULL,
+    Image_location VARCHAR(250) NOT NULL,
+    PRIMARY KEY (Image_id)
+) AUTO_INCREMENT = 1;
+
+CREATE TABLE message_image (
+message_id INT(8) NOT NULL,
+image_id INT(8) NOT NULL,
+PRIMARY KEY(message_id, image_id)
+);
+
+CREATE TABLE message_image (
+    message_id INT(8) NOT NULL,
+    image_id INT(8) NOT NULL,
+    PRIMARY KEY (message_id, image_id)
+);
+
+INSERT INTO image (image_name, image_location)
+VALUES
+(“Arc de Triomphe”, “Paris, France”),
+(“Times Square”, “New York, New York”),
+(“The Colosseum”, “Rome, Italy”),
+(“The beach”, “Cancun, Mexico”),
+(“Big Ben”, “London, England”);
+
+INSERT INTO image (image_name, image_location)
+VALUES
+('Arc de Triomphe', 'Paris, France'),
+('Times Square', 'New York, New York'),
+('The Colosseum', 'Rome, Italy'),
+('The beach', 'Cancun, Mexico'),
+('Big Ben', 'London, England');
+
+INSERT INTO message_image(message_id, image_id)
+VALUES
+(1, 1),
+(2, 2),
+(2, 3),
+(3, 1),
+(4, 4);
+
+INSERT INTO message_image (message_id, image_id)
+VALUES
+(1, 1),
+(2, 2),
+(2, 3),
+(3, 1),
+(4, 4);
+
+SELECT 
+person.first_name AS “sender first”,
+person.last_name AS “sender last”,
+person.first_name AS “receiver first”,
+person.last_name AS “receiver last”,
+message.message_id, message.message, message.send_datetime
+FROM person, message
+WHERE
+person.person_id = message.sender_id AND
+person.person_id = message.receiver_id AND
+message.sender_id = 1;
+
+SELECT 
+    sender.first_name AS "sender first",
+    sender.last_name AS "sender last",
+    receiver.first_name AS "receiver first",
+    receiver.last_name AS "receiver last",
+    message.message_id,
+    message.message,
+    message.send_datetime
+FROM 
+    person AS sender
+JOIN 
+    message ON sender.person_id = message.sender_id
+JOIN 
+    person AS receiver ON receiver.person_id = message.receiver_id
+WHERE 
+    sender.person_id = 1 OR receiver.person_id = 1;
+
+SELECT
+COUNT(message.receiver_id) AS “message count”,
+Person.person_id, person.first_name, person.last_name
+FROM
+person, message
+WHERE
+person.person_id = message.sender_id
+GROUP BY
+Person.person_id;
+
+SELECT
+    COUNT(message.receiver_id) AS 'message count',
+    person.person_id,
+    person.first_name,
+    person.last_name
+FROM
+    person
+JOIN
+    message ON person.person_id = message.sender_id
+GROUP BY
+    person.person_id;
+
+SELECT
+Message.message_id, message.message, message.send_datetime, image.image_name, image.image_location
+FROM
+message
+INNER JOIN message_image
+ON message.message_id = message_image.message_id
+INNER JOIN image
+ON image.image_id = message_image.image_id
+GROUP BY message_image.message_id;
+
+SELECT
+    message.message_id,
+    message.message,
+    message.send_datetime,
+    image.image_name,
+    image.image_location
+FROM
+    message
+INNER JOIN
+    message_image
+ON
+    message.message_id = message_image.message_id
+INNER JOIN
+    image
+ON
+    image.image_id = message_image.image_id;
+
+
+	</code></pre>
+        </div>
+
+	<div class="improvements">
+	    <h3>Code Improvements</h3>
+	    <ul>
+		<li>Made the project more intuitive by changing the schema to focus on 
+		sports, teams, and athletes instead of a cryptic contact and image
+		message database.</li>
+		<li>Converted from MySql to SqLite Python script for portability
+		and modularity.</li>
+		<li>Added user authentication using bcrypt password hashing.</li>
+		<li>Added try/except blocks with error handling.</li>
+		<li>Added temporary tables used to store query results.</li>
+		<li>Added re module regular expression to validate username format.</li>
+		<li>Added DocStrings and extensive commenting including header with name,
+		version, date, and purpose.</li>
+	  </ul>
+	</div>
+
+	<div class="code">
+            <h3>Revised Code</h3>
+            <pre><code>
+"""
+Author: Dave Lewellen
+Date: 09/29/2023
+Version: 1.0
+
+SQLite User Authentication and Database Query Script
+
+This Python script provides functionality for user authentication and performing various database queries using SQLite.
+It includes functions for user management, database initialization, data insertion, and querying. The script is designed
+to be a template that can be used as a starting point for building applications that require user authentication
+and database interaction.
+"""
+
+import sqlite3
+import bcrypt
+import re
+
+
+def create_user(username, password, cursor, conn):
+    """
+    Create a new user with a hashed password.
+
+    Arguments:
+        username: The username to create.
+        password: The user's plaintext password.
+        cursor: The database cursor.
+        conn: The database connection.
+    """
+    try:
+        if not is_valid_username(username):
+            print("Invalid username. Usernames must be alphanumeric and at least 4 characters long.")
+            return
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        cursor.execute('INSERT INTO Users (Username, Password) VALUES (?, ?)', (username, hashed_password))
+        conn.commit()
+        print("User created successfully.")
+    except sqlite3.Error as e:
+        print("SQLite error while creating user:", e)
+    except Exception as e:
+        print("An error occurred:", e)
+
+
+def verify_user(username, password, cursor):
+    """
+    Verify a user's credentials.
+
+    Arguments:
+        username: The username to verify.
+        password: The user's password.
+        cursor: The database cursor.
+
+    Returns:
+        bool: True if the user is authenticated, False otherwise.
+    """
+    try:
+        cursor.execute('SELECT Password FROM Users WHERE Username = ?', (username,))
+        hashed_password = cursor.fetchone()
+        if hashed_password:
+            return bcrypt.checkpw(password.encode('utf-8'), hashed_password[0])
+        return False
+    except sqlite3.Error as e:
+        print("SQLite error while verifying user:", e)
+        return False
+    except Exception as e:
+        print("An error occurred:", e)
+        return False
+
+
+def is_valid_username(username):
+    """
+    Validate the format of a username.
+
+    Arguments:
+        username: The username to validate.
+
+    Returns:
+        bool: True if the username is valid, False otherwise.
+    """
+    return re.match(r"^[a-zA-Z0-9]{4,}$", username)
+
+
+def initialize_database():
+    """
+    Initialize the database and tables.
+
+    Returns:
+        sqlite3.Connection: The database connection.
+    """
+    conn = sqlite3.connect('AthletesDB.sqlite')
+    cursor = conn.cursor()
+
+    # Drop tables if they exist
+    cursor.execute('DROP TABLE IF EXISTS Sports')
+    cursor.execute('DROP TABLE IF EXISTS Teams')
+    cursor.execute('DROP TABLE IF EXISTS Athletes')
+    cursor.execute('DROP TABLE IF EXISTS AthleteTeam')
+    cursor.execute('DROP TABLE IF EXISTS Users')
+
+    # Create tables
+    cursor.execute('''
+        CREATE TABLE Sports (
+            SportID INTEGER PRIMARY KEY,
+            SportName TEXT NOT NULL
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE Teams (
+            TeamID INTEGER PRIMARY KEY,
+            TeamName TEXT NOT NULL,
+            SportID INTEGER,
+            FOREIGN KEY (SportID) REFERENCES Sports(SportID)
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE Athletes (
+            AthleteID INTEGER PRIMARY KEY,
+            FirstName TEXT NOT NULL,
+            LastName TEXT NOT NULL,
+            Age INTEGER,
+            Height REAL,
+            Weight REAL
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE AthleteTeam (
+            AthleteID INTEGER,
+            TeamID INTEGER,
+            PRIMARY KEY (AthleteID, TeamID),
+            FOREIGN KEY (AthleteID) REFERENCES Athletes(AthleteID),
+            FOREIGN KEY (TeamID) REFERENCES Teams(TeamID)
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE Users (
+            UserID INTEGER PRIMARY KEY,
+            Username TEXT NOT NULL,
+            Password TEXT NOT NULL
+        )
+    ''')
+
+    return conn
+
+
+def insert_sample_data(cursor):
+    """
+    Insert sample data into the database.
+
+    Arguments:
+        cursor: The database cursor.
+    """
+    cursor.executemany('INSERT INTO Sports (SportName) VALUES (?)', [
+        ('Basketball',),
+        ('Soccer',),
+        ('Tennis',)
+    ])
+
+    cursor.executemany('INSERT INTO Teams (TeamName, SportID) VALUES (?, ?)', [
+        ('Team A', 1),
+        ('Team B', 1),
+        ('Team X', 2),
+        ('Team Y', 2)
+    ])
+
+    cursor.executemany('INSERT INTO Athletes (FirstName, LastName, Age, Height, Weight) VALUES (?, ?, ?, ?, ?)', [
+        ('John', 'Doe', 25, 6.2, 185),
+        ('Jane', 'Smith', 28, 5.8, 155),
+        ('Michael', 'Johnson', 22, 6.0, 175),
+        ('Emily', 'Brown', 24, 5.9, 160)
+    ])
+
+    cursor.executemany('INSERT INTO AthleteTeam (AthleteID, TeamID) VALUES (?, ?)', [
+        (1, 1),  # Associate athlete 1 with Team A
+        (2, 1),  # Associate athlete 2 with Team A
+        (2, 2),  # Associate athlete 2 with Team B
+        (3, 3),  # Associate athlete 3 with Team X
+        (4, 4),  # Associate athlete 4 with Team Y
+    ])
+
+
+def reset_query_results(cursor):
+    """
+    Reset query results (drop temporary tables).
+
+    Arguments:
+        cursor: The database cursor.
+    """
+    cursor.execute('DROP TABLE IF EXISTS Temp_SportsTeams')
+    cursor.execute('DROP TABLE IF EXISTS Temp_SportsNoTeams')
+    cursor.execute('DROP TABLE IF EXISTS Temp_TeamsWithSports')
+    cursor.execute('DROP TABLE IF EXISTS Temp_TeamWithMostAthletes')
+
+
+def create_temporary_tables(cursor):
+    """
+    Create temporary tables to store query results.
+
+    Arguments:
+        cursor: The database cursor.
+    """
+    cursor.execute('''
+        CREATE TEMP TABLE IF NOT EXISTS Temp_SportsTeams AS
+        SELECT Sports.SportName, COUNT(Teams.TeamID) AS TeamCount
+        FROM Sports
+        LEFT JOIN Teams ON Sports.SportID = Teams.SportID
+        GROUP BY Sports.SportName
+    ''')
+
+    cursor.execute('''
+        CREATE TEMP TABLE IF NOT EXISTS Temp_SportsNoTeams AS
+        SELECT Sports.SportName
+        FROM Sports
+        LEFT JOIN Teams ON Sports.SportID = Teams.SportID
+        WHERE Teams.TeamID IS NULL
+    ''')
+
+    cursor.execute('''
+        CREATE TEMP TABLE IF NOT EXISTS Temp_TeamsWithSports AS
+        SELECT Teams.TeamName, Sports.SportName
+        FROM Teams
+        JOIN Sports ON Teams.SportID = Sports.SportID
+    ''')
+
+    cursor.execute('''
+        CREATE TEMP TABLE IF NOT EXISTS Temp_TeamWithMostAthletes AS
+        SELECT Teams.TeamName, COUNT(AthleteTeam.AthleteID) AS AthleteCount
+        FROM Teams
+        JOIN AthleteTeam ON Teams.TeamID = AthleteTeam.TeamID
+        GROUP BY Teams.TeamName
+        ORDER BY AthleteCount DESC
+        LIMIT 1
+    ''')
+
+
+def print_query_results(cursor):
+    """
+    Print query results.
+
+    Arguments:
+        cursor: The database cursor.
+    """
+    cursor.execute('SELECT * FROM Temp_SportsTeams')
+    sports_teams = cursor.fetchall()
+    print("\nSports and the Number of Associated Teams:")
+    for row in sports_teams:
+        print(f"{row[0]} - {row[1]} teams")
+
+    cursor.execute('SELECT * FROM Temp_SportsNoTeams')
+    sports_no_teams = cursor.fetchall()
+    print("\nSports with No Associated Teams:")
+    for row in sports_no_teams:
+        print(row[0])
+
+    cursor.execute('SELECT * FROM Temp_TeamsWithSports')
+    teams_with_sports = cursor.fetchall()
+    print("\nTeams and Their Respective Sports:")
+    for row in teams_with_sports:
+        print(f"{row[0]} - {row[1]}")
+
+    cursor.execute('SELECT * FROM Temp_TeamWithMostAthletes')
+    team_with_most_athletes = cursor.fetchone()
+    print("\nTeam with the Most Athletes:")
+    if team_with_most_athletes:
+        print(f"{team_with_most_athletes[0]} - {team_with_most_athletes[1]} athletes")
+    else:
+        print("No teams found.")
+
+
+def main():
+    conn = initialize_database()
+    try:
+        cursor = conn.cursor()
+
+        # Reset query results and database tables
+        reset_query_results(cursor)
+        insert_sample_data(cursor)
+
+        # Predefine user1
+        create_user('Dave', 'Lewellen', cursor, conn)
+
+        # User Authentication Prompt
+        authenticated = False
+        while not authenticated:
+            username = input("Enter your username: ")
+            password = input("Enter your password: ")
+
+            if verify_user(username, password, cursor):
+                authenticated = True
+                print("User authenticated successfully.")
+                break
+            else:
+                print("Authentication failed. Please try again.")
+
+        # Fetch and print the list of athletes only once after successful authentication
+        if authenticated:
+            cursor.execute('SELECT FirstName, LastName FROM Athletes')
+            athletes = cursor.fetchall()
+            print("\nList of Athletes:")
+            for athlete in athletes:
+                print(f"{athlete[0]} {athlete[1]}")
+
+        # Create temporary tables for query results
+        create_temporary_tables(cursor)
+
+        # Execute and print query results
+        print_query_results(cursor)
+
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+    except Exception as e:
+        print("An error occurred:", e)
+    finally:
+        if conn:
+            conn.close()
+
+
+if __name__ == "__main__":
+    main()
+	</code></pre>
+	</div>
+    </section>
+
+<!-- Video file link -->
+    <footer>
+        <a href="https://www.youtube.com/watch?v=Izet3t5vFII">Watch My Code Review</a>
+    </footer>
+
+<div class="floating-nav">
+    <button>Sections</button>
+    <div class="nav-list">
+        <ul>
+            <li><a href="index.html">My Professional Journey</a></li>
+            <li><a href="project1.html">Artifact 1</a></li>
+            <li><a href="project2.html">Artifact 2</a></li>
+            <li><a href="project3.html">Artifact 3</a></li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>

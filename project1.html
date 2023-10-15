@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact 1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My ePortfolio</h1>
+    </header>
+
+<section id="project1">
+        <h2>Artifact 1</h2>
+	<h3>Narrative</h3>
+        <p>Artifact One comes from the final project of the Software Testing and Automation course
+	 during the 22EW3 term here at SNHU. Built originally in Java, it comprises two integral classes:
+	 the 'Appointment' and 'Appointment Service' classes. The former encapsulates an appointment's details,
+	 including its date, time, description, and a unique identifier. Meanwhile, the 'Appointment Service'
+	 class serves as the backbone for managing these appointment objects, offering CRUD (Create, Read,
+	 Update, Delete) operations.</p>
+
+	<p>I selected this artifact for inclusion because it transparently illustrates software engineering
+	 principles and design. The appointment object's attributes, coupled with the CRUD functionalities,
+	 effectively convey design and operational tenents. The integration of validation helper methods and
+	 the transition to Python further highlight the compentencies and insights I've gained during my tenure at
+	 SNHU and through external learning resources.</p>
+
+	<strong>Course Outcome 2: You DesignED, DevelopED, and DeliverED professional-quality oral, written, and
+	 visual communications that are coherent, technically sound, and appropriately adapted to specific audiences
+	 and contexts by completing the following enhancements</strong>
+	
+	<p>Artifact one aligned with quality of communication by including Docstring commenting, as well as explicit
+	 error messages, and naming conventions of methods that make clear their singular responsibilities. There is also
+	an emphasis on header commenting which includes details such as author's name, version number, date created,
+	and purpose of the specific code file, ensuring clarity and transparency.</p>
+
+	<strong>Course Outcome 3: You DesignED and EvaluateED computing solutions that solve a given problem using algorithmic
+	 principles and computer science practices and standards appropriate to its solution, while managing the trade-offs
+	 involved in design choices by completing the following enhancements</strong>
+	
+	<p>Artifact one aligned with algorithmic principals by use of modular validation methods and the clear
+	implementation of encapsulation demonstrate an understanding of separation of functionalities and algrorithmic
+	purpose. The choice of data structures, such as nested dictionaries, underscores a focus on algorithmic
+	and data structure efficiency.This efficiency is highlighted by use of a nested dictionary to replace the use
+	of an ArrayList, with the change in time complexity going from a potential of O(n) to O(1) with the new data
+	structure.</p>
+
+	<strong>Course Outcome 4: You DemonstrateD an ability to use well-founded and innovative techniques, skills,
+	 and tools in computing practices for the purpose of implementing computer solutions that deliver value and
+	 accomplish industry-specific goals by completing the following enhancements</strong>
+	
+	<p>Artifact one aligns with innovative techniques, skills and implementations by use of the Python language and
+	all it's many library extensions. The possiblity for expansion of data analysis and visual representations
+	is expansive. Techniques like using regular expression validation with the "re" module ensure that data adheres
+	to a specic format and is another example.</P>
+
+	<strong>Course Outcome 5: You DevelopED a security mindset that anticipates adversarial exploits in software
+	 architecture and designs to expose potential vulnerabilities, mitigate design flaws, and ensure privacy and
+	 enhanced security of data and resources by completing the following enhancements</strong>
+	
+	<p>Artifact one aligns with a security mindset by incorporating validation of input data, necessary for protecting
+	against injection attacks. Other security measures include a less complex and more efficient way of
+	generating unpredictable IDs, and encapsulation to reinforce controlled data access.</p>
+
+        <div class="code">
+            <h3>Original Code</h3>
+            <pre><code>
+package appointments;
+
+import java.util.*;
+import java.time.*;
+
+public class Appointment {
+
+	private LocalDate appointmentDate; //year-month-day
+	private String description;
+	private String appointmentId;
+	//public static LocalDate today = LocalDate.now();
+	
+	// Contact constructor
+	public Appointment(LocalDate appointmentDate, String description) {
+		LocalDate today = LocalDate.now();
+		
+		// Exceptions
+		if (appointmentDate == null) {
+			throw new IllegalArgumentException("Invalid appointment date.");
+		}
+		else if (appointmentDate.isBefore(today)) {
+			throw new IllegalArgumentException("Invalid appointment date.");
+		}
+		if (description == null || description.isEmpty() || description.length() > 50) {
+			throw new IllegalArgumentException("Invalid description.");
+		}
+		
+		// Assignments
+		this.appointmentDate = appointmentDate;
+		this.description = description.trim();
+			
+		// Use first character from other values and then add them to a random number to generate unique id
+		appointmentId = description.substring(0, 3);
+		appointmentId = appointmentId.toUpperCase() + (int) Math.floor(Math.random() * 10000000);
+				
+		// Scramble created contact id value to make it more randomized
+		ArrayList<Character> chars = new ArrayList<Character>(appointmentId.length());
+		for (char c : appointmentId.toCharArray()) {
+			chars.add(c);
+		}
+					
+		Collections.shuffle(chars);
+		char[] shuffled = new char[chars.size()];
+		for (int i = 0; i < shuffled.length; i++) {
+			shuffled[i] = chars.get(i);
+		}
+				
+		this.appointmentId = new String(shuffled);
+				
+		if (appointmentId == null || appointmentId.isEmpty() || appointmentId.length() > 10) {
+			throw new IllegalArgumentException("Invalid appointment ID.");
+		}
+	}
+
+	// Getters and Setters
+	public LocalDate getAppointmentDate() {
+		return appointmentDate;
+	}
+
+	public void setAppointmentDate(LocalDate appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAppointmentId() {
+		return appointmentId;
+	}
+	
+	public void setAppointmentId(String appointmentId) {
+		if (appointmentId == null || appointmentId.isEmpty() || appointmentId.length() > 10) {
+			throw new IllegalArgumentException("Invalid appointment ID.");
+		}
+		this.appointmentId = appointmentId;
+	}
+	
+	// Reads data instead of memory address location
+	/*public String toString() {
+		return appointmentDate + ", " + description + ", " + appointmentId;
+	}*/
+	
+	// Test code
+	/*public static void main(String[] args) {
+		
+		Appointment tryst1 = new Appointment(LocalDate.parse("2022-02-15"), "Getting fillings");
+		System.out.println(tryst1.appointmentDate);
+		System.out.println(tryst1.description);
+		System.out.println(tryst1.appointmentId);
+		
+		Appointment tryst2 = new Appointment(LocalDate.parse("2022-03-15"), "Root canal");
+		System.out.println(tryst2.appointmentDate);
+		System.out.println(tryst2.description);
+		System.out.println(tryst2.appointmentId);
+		
+		Appointment tryst3 = new Appointment(LocalDate.parse("2022-04-15"), "Install crown");
+		System.out.println(tryst3.appointmentDate);
+		System.out.println(tryst3.description);
+		System.out.println(tryst3.appointmentId);
+	}*/
+}
+
+=========================================================================================================
+
+package appointments;
+
+import java.util.*;
+import java.time.*;
+
+public class AppointmentService {
+	
+	// Initialize list
+	private static ArrayList<Appointment> listOfAppointments = new ArrayList<Appointment>();
+	
+	// Checks list for appointments and adds if it doesn't exist
+	public static boolean addAppointment(Appointment a) {
+		boolean appointmentExist = false;
+		
+		for (Appointment l:listOfAppointments) {
+			if(l.equals(a)) {
+				appointmentExist = true;
+			}
+		}
+		if(!appointmentExist) {
+			listOfAppointments.add(a);
+			return true;
+			}
+		else {
+			return false;
+		}
+	}
+	
+	// Delete appointment from list
+	public static boolean deleteAppointment(String appointmentId) {
+		for(Appointment l:listOfAppointments) {
+			if(l.getAppointmentId().equals(appointmentId)) {
+				listOfAppointments.remove(l);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// Update existing appointment values in list
+	public static boolean updateAppointment(String appointmentId, LocalDate appointmentDate, String description) {
+		LocalDate today = LocalDate.now();
+		for(Appointment l:listOfAppointments) {
+			if (l.getAppointmentId().equals(appointmentId)) {
+				if(!appointmentDate.equals(null) && !(appointmentDate.isBefore(today))) {
+					l.setAppointmentDate(appointmentDate);
+				}
+				if(!description.equals("") && !(description.length() > 50)) {
+					l.setDescription(description);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	//Test code
+	/*public static void main(String[] args) {
+	
+	String id1;
+	String id2;
+	
+	Appointment tryst1 = new Appointment(LocalDate.parse("2022-02-15"), "Getting a check up");
+	id1 = tryst1.getAppointmentId();
+	addAppointment(tryst1);
+	
+	System.out.print(Arrays.toString(listOfAppointments.toArray()));
+	
+	Appointment tryst2 = new Appointment(LocalDate.parse("2022-11-15"), "Getting a cavity filled");
+	id2 = tryst2.getAppointmentId();
+	addAppointment(tryst2);
+	
+	System.out.print(Arrays.toString(listOfAppointments.toArray()));
+	
+	deleteAppointment(id1);
+	
+	System.out.print(Arrays.toString(listOfAppointments.toArray()));
+	
+	updateAppointment(tryst2.getAppointmentId(), LocalDate.parse("2023-01-01"), "Getting a root canal");
+	
+	System.out.print(Arrays.toString(listOfAppointments.toArray()));
+	}*/
+}
+
+===============================================================================================================
+
+package Tests;
+
+import appointments.AppointmentService;
+import appointments.Appointment;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.Test;
+
+class AppointmentServiceTest {
+
+	// Tests adding new appointments
+	@Test
+	void addAppointmentTest() {
+		Appointment tryst1 = new Appointment(LocalDate.parse("2022-02-15"), "Getting a check up");
+		Appointment tryst2 = new Appointment(LocalDate.parse("2022-02-28"), "Getting a cavity filled");
+		Appointment tryst3 = new Appointment(LocalDate.parse("2022-03-28"), "Getting a root canal");
+		
+		assertEquals(true, AppointmentService.addAppointment(tryst1));
+		assertEquals(true, AppointmentService.addAppointment(tryst2));
+		assertEquals(true, AppointmentService.addAppointment(tryst3));
+	}
+	
+	// Tests deleting appointments
+	@Test
+	void deleteAppointmentTest() {
+		Appointment tryst1 = new Appointment(LocalDate.parse("2022-02-15"), "Getting a check up");
+		tryst1.setAppointmentId("123456789");
+		AppointmentService.addAppointment(tryst1);
+		Appointment tryst2 = new Appointment(LocalDate.parse("2022-03-31"), "Getting a cavity filled");
+		AppointmentService.addAppointment(tryst2);
+		Appointment tryst3 = new Appointment(LocalDate.parse("2022-04-01"), "Getting a root canal");
+		AppointmentService.addAppointment(tryst3);
+		
+		assertEquals(true, AppointmentService.deleteAppointment("123456789"));
+		assertEquals(true, AppointmentService.deleteAppointment(tryst2.getAppointmentId()));
+		assertEquals(false, AppointmentService.deleteAppointment("234567890"));
+		assertEquals(false, AppointmentService.deleteAppointment(null));
+		assertEquals(false, AppointmentService.deleteAppointment(""));
+	}
+	
+	// Tests updating appointments
+	@Test
+	void updateAppointmentTest() {
+		Appointment tryst1 = new Appointment(LocalDate.parse("2022-02-15"), "Getting a check up");
+		tryst1.setAppointmentId("123456789");
+		AppointmentService.addAppointment(tryst1);
+		Appointment tryst2 = new Appointment(LocalDate.parse("2022-03-31"), "Getting a cavity filled");
+		AppointmentService.addAppointment(tryst2);
+		Appointment tryst3 = new Appointment(LocalDate.parse("2022-04-01"), "Getting a root canal");
+		AppointmentService.addAppointment(tryst3);
+		
+		assertEquals(true, AppointmentService.updateAppointment("123456789", LocalDate.parse("2023-11-15"), "Getting a root canal"));
+		assertEquals(true, AppointmentService.updateAppointment(tryst2.getAppointmentId(),LocalDate.parse("2023-10-15"), "Getting a check up"));
+		assertEquals(false, AppointmentService.updateAppointment("", LocalDate.parse("2023-09-15"), "Getting a cavity filled"));
+		assertEquals(false, AppointmentService.updateAppointment("987654321", LocalDate.parse("2024-01-01"), "Getting a crown installed"));
+	}
+}</code></pre>
+        </div>
+
+	<div class="improvements">
+	    <h3>Code Improvements</h3>
+	    <ul>
+		<li>Project refactored into Python which is dynamically typed allowing
+		for faster and more flexible development.</li>
+		<li>Far less complex ID generation.</li>
+		<li>Explicit and modular input validation methods for cleaner and more
+		organized code.</li>
+		<li>Datetime is improved to represent both date and time.</li>
+		<li>Improved from static storage to more dynamic Python dictionary.</li>
+		<li>Extensive DocStrings for classes and methods added to improve code
+		readability and understanding.</li>
+		<li>Increased and better use of commenting as well as comment headers.</li>
+		<li>Use of regular expressions to check name format.</li>
+		<li>Use of class-level dictionary for simplicity in handling multiple
+		appointments without instantiating objects.</li>
+	    </ul>
+	</div>
+
+        <div class="code">
+            <h3>Revised Code</h3>
+            <pre><code>
+"""
+    Author: Dave Lewellen
+    Date: 09/15/2023
+    Version: 1.0
+
+    This code represents an appointment with a datetime and description.
+
+    Create instances of the Appointment class to represent individual
+    appointments with proper validation and a unique ID for each appointment.
+"""
+
+import datetime
+import random
+import string
+
+class Appointment:
+    """
+    Represents an appointment with a datetime and description.
+    """
+
+    def __init__(self, appointment_datetime, description):
+        """
+        Initializes the appointment object.
+
+        Arguments:
+            appointment_datetime (datetime.datetime): The appointment datetime.
+            description (str): The appointment description.
+
+        Errors:
+            ValueError: If appointment_datetime is in the past, description is empty, description exceeds 50 characters, or appointment_datetime is not a datetime object.
+        """
+        self.appointment_id = self.generate_appointment_id()
+        self.set_appointment_datetime(appointment_datetime)
+        self.set_description(description)
+
+    def generate_appointment_id(self):
+        """
+        Generate a random alphanumeric appointment ID.
+        """
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
+    def set_appointment_datetime(self, appointment_datetime):
+        """
+        Set the appointment datetime and makes sure it's in the future.
+
+        Arguments:
+            appointment_datetime (datetime.datetime): The appointment datetime.
+
+        Errors:
+            ValueError: If appointment_datetime is in the past or not a datetime object.
+        """
+        now = datetime.datetime.now()
+        if not isinstance(appointment_datetime, datetime.datetime):
+            raise ValueError("Invalid appointment datetime. It should be a datetime object.")
+        if appointment_datetime <= now:
+            raise ValueError("Invalid appointment datetime. It should be in the future.")
+        self.appointment_datetime = appointment_datetime
+
+    def set_description(self, description):
+        """
+        Set the appointment description, validate length and makes sure it is not empty.
+
+        Arguments:
+            description: The appointment description.
+
+        Errors:
+            ValueError: If description is empty or exceeds 50 characters.
+        """
+        if not description:
+            raise ValueError("Invalid description. It should not be empty.")
+        if len(description) > 50:
+            raise ValueError("Invalid description. It should not exceed 50 characters.")
+        self.description = description
+
+    def __str__(self):
+        """
+        Get a string representation of the appointment object.
+        """
+        return f"Appointment: {{'Datetime': {self.appointment_datetime}, 'Description': '{self.description}', 'ID': '{self.appointment_id}'}}"
+
+================================================================================================================================================
+
+"""
+    Author: Dave Lewellen
+    Date: 09/15/2023
+    Version: 1.0
+
+    This Python script manages appointments for different individuals. It defines a class called AppointmentService
+    for handling appointments, including adding, retrieving, updating, and deleting appointments. The appointments
+    are stored in memory in a dictionary.
+"""
+
+# Import necessary modules
+from Appointment import Appointment  # Import the Appointment class from another module
+import datetime  # Import the datetime module for working with date and time
+import re  # Import the re module for regular expression validation
+
+
+# Define a class for managing appointments
+class AppointmentService:
+    # A class-level dictionary to store appointments for different people
+    appointments = {}
+
+    @staticmethod
+    def _validate_name(name):
+        """
+        Validate the name format and length.
+
+        Arguments:
+            name (str): The name to be validated.
+
+        Raises:
+            ValueError: If the name format or length is invalid.
+        """
+        # Use a regular expression to check if the name consists of valid characters
+        if not re.match("^[A-Za-z0-9_-]*$", name):
+            raise ValueError(
+                "Invalid name format. Name should consist of letters, numbers, underscores, and hyphens only.")
+
+        # Check if the name length exceeds the maximum allowed length
+        elif len(name) > 50:
+            raise ValueError("Name is too long. It should not exceed 50 characters.")
+
+    @staticmethod
+    def _validate_description(description):
+        """
+        Validate the description length.
+
+        Arguments:
+            description (str): The description to be validated.
+
+        Raises:
+            ValueError: If the description length is invalid.
+        """
+        # Check if the description length exceeds the maximum allowed length
+        if len(description) > 50:
+            raise ValueError("Description is too long. It should not exceed 50 characters.")
+
+    @staticmethod
+    def _validate_appointment_id(unique_id):
+        """
+        Validate the appointment ID format.
+
+        Arguments:
+            unique_id (str): The appointment ID to be validated.
+
+        Raises:
+            ValueError: If the appointment ID format is invalid.
+        """
+        # Use a regular expression to check if the unique_id consists of valid characters
+        if not re.match("^[A-Za-z0-9]*$", unique_id):
+            raise ValueError("Invalid appointment ID format. It should consist of letters and numbers only.")
+
+    @staticmethod
+    def add_appointment(name, appointment):
+        """
+        Add an appointment to the appointments dictionary for a specific person.
+
+        Arguments:
+            name (str): The name of the person.
+            appointment (Appointment): The appointment object to be added.
+
+        Raises:
+            ValueError: If validation checks fail or if the appointment object is invalid.
+        """
+        # Validate the name format and length
+        AppointmentService._validate_name(name)
+
+        # Validate the description length
+        AppointmentService._validate_description(appointment.description)
+
+        # Check if the appointment object is an instance of the Appointment class
+        if not isinstance(appointment, Appointment):
+            raise ValueError("Invalid appointment object.")
+
+        # Check if the person's name is already in the appointments dictionary
+        if name in AppointmentService.appointments:
+            # Add the appointment to the dictionary under the person's name
+            AppointmentService.appointments[name][appointment.appointment_id] = {
+                'description': appointment.description,
+                'date_time': appointment.appointment_datetime
+            }
+        else:
+            # Create a new entry for the person in the dictionary
+            AppointmentService.appointments[name] = {appointment.appointment_id: {
+                'description': appointment.description,
+                'date_time': appointment.appointment_datetime
+            }}
+
+    @staticmethod
+    def get_appointments(name):
+        """
+        Retrieve appointments for a given person.
+
+        Arguments:
+            name (str): The name of the person.
+
+        Returns:
+            dict: A dictionary of appointments for the person.
+        """
+        # Validate the name format and length
+        AppointmentService._validate_name(name)
+
+        # Retrieve appointments for the person from the appointments dictionary
+        return AppointmentService.appointments.get(name, {})
+
+    @staticmethod
+    def update_appointment(name, unique_id, new_description):
+        """
+        Update the description of an appointment.
+
+        Arguments:
+            name (str): The name of the person.
+            unique_id (str): The ID of the appointment to be updated.
+            new_description (str): The new description for the appointment.
+
+        Raises:
+            ValueError: If validation checks fail.
+        """
+        # Validate the name format and length
+        AppointmentService._validate_name(name)
+
+        # Validate the appointment ID format
+        AppointmentService._validate_appointment_id(unique_id)
+
+        # Validate the description length
+        AppointmentService._validate_description(new_description)
+
+        # Check if the person's name and appointment ID exist in the appointments dictionary
+        if name in AppointmentService.appointments and unique_id in AppointmentService.appointments[name]:
+            # Update the description of the appointment
+            AppointmentService.appointments[name][unique_id]['description'] = new_description
+
+    @staticmethod
+    def delete_appointment(name, unique_id):
+        """
+        Delete an appointment.
+
+        Arguments:
+            name (str): The name of the person.
+            unique_id (str): The ID of the appointment to be deleted.
+
+        Raises:
+            ValueError: If validation checks fail.
+        """
+        # Validate the name format and length
+        AppointmentService._validate_name(name)
+
+        # Validate the appointment ID format
+        AppointmentService._validate_appointment_id(unique_id)
+
+        # Check if the person's name and appointment ID exist in the appointments dictionary
+        if name in AppointmentService.appointments and unique_id in AppointmentService.appointments[name]:
+            # Delete the appointment from the dictionary
+            del AppointmentService.appointments[name][unique_id]
+
+
+# The main program starts here
+if __name__ == "__main__":
+    try:
+        # Create three appointment instances
+        app1 = Appointment(datetime.datetime(2024, 2, 15, 14, 30), "Getting fillings")
+        app2 = Appointment(datetime.datetime(2024, 3, 15, 10, 15), "Root canal")
+        app3 = Appointment(datetime.datetime(2024, 4, 15, 16, 45), "Install crown")
+        app4 = Appointment(datetime.datetime(2024, 1, 13, 13, 30), "Getting")
+        app5 = Appointment(datetime.datetime(2024, 12, 13, 10, 30), "Physical")
+
+        # Add appointments for different people using AppointmentService
+        AppointmentService.add_appointment("James", app1)
+        AppointmentService.add_appointment("James", app2)
+        AppointmentService.add_appointment("James", app3)
+        AppointmentService.add_appointment("Alice", app4)
+        AppointmentService.add_appointment("Alice", app5)
+
+        # Retrieve appointments for a specific person using AppointmentService
+        person_to_check = "Alice"
+        appointments_for_person = AppointmentService.get_appointments(person_to_check)
+
+        print(f"Appointments for {person_to_check}:")
+        for unique_id, appointment in appointments_for_person.items():
+            print(
+                f"Name: {person_to_check}, Description: {appointment['description']}, "
+                f"Date & Time: {appointment['date_time']}")
+
+        # Update and delete appointments using AppointmentService
+        AppointmentService.update_appointment(
+            "James", app1.appointment_id, "Client A Follow-up Meeting")
+        AppointmentService.delete_appointment(
+            "Alice", app2.appointment_id)
+
+        # Display updated appointments using AppointmentService
+        print(f"\nUpdated Appointments for {person_to_check}:")
+        updated_appointments_for_person = AppointmentService.get_appointments(person_to_check)
+        for unique_id, appointment in updated_appointments_for_person.items():
+            print(
+                f"Name: {person_to_check}, Description: {appointment['description']}, "
+                f"Date & Time: {appointment['date_time']}")
+    except ValueError as e:
+        print(f"Error: {e}")</code></pre>
+	</div>
+    </section>
+
+<!-- Video file link -->
+    <footer>
+        <a href="https://www.youtube.com/watch?v=Izet3t5vFII">Watch My Code Review</a>
+    </footer>
+
+<div class="floating-nav">
+    <button>Sections</button>
+    <div class="nav-list">
+        <ul>
+            <li><a href="index.html">My Professional Journey</a></li>
+            <li><a href="project1.html">Artifact 1</a></li>
+            <li><a href="project2.html">Artifact 2</a></li>
+            <li><a href="project3.html">Artifact 3</a></li>
+        </ul>
+    </div>
+</div>
+    
+</body>
+</html>

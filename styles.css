@@ -1,0 +1,150 @@
+/* Existing styles for body and header */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1em 0;
+
+}
+
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+nav li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #ecf0f1;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #3498db;
+}
+
+section {
+    padding: 20px;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+h2 {
+    font-size: 24px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.code {
+    background-color: #f8f8f8;
+    padding: 15px;
+    margin-top: 20px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+}
+
+.improvements {
+    background-color: #eaf2f8; /* Light blue background for emphasis */
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+}
+
+.improvements h3 {
+    font-size: 20px;
+    border-bottom: 1px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.improvements ul {
+    list-style-type: square; /* You can choose other styles like circle or disc */
+    padding-left: 20px;
+}
+
+.improvements li {
+    margin-bottom: 10px;
+}
+
+
+.images img {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.floating-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+.floating-nav button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.floating-nav .nav-list {
+    display: none;
+    background-color: #2c3e50;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.floating-nav:hover .nav-list {
+    display: block;
+}
+
+.nav-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-list li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+}
+
+.nav-list li a:hover {
+    background-color: #3498db;
+}
+
+
+footer {
+    margin: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

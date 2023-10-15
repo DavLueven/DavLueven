@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My ePortfolio</h1>
+    </header>
+    
+   <section id="project2">
+        <h2>Artifact 2</h2>
+	<h3>Narrative</h3>
+	<p>The "Zoo Monitoring System" is a console-based tool I initially developed during
+	 the Foundations in Application Development course in 19EW3. The system allows users to
+	 access animal and habitat details, originally sourced from CSV files, presumably completed
+	 by zoo staff. However, the initial method of parsing these files was overly intricate.</p>
+	
+	<p>In addition to viewing details, users can set alerts and action items, categorized by animal or
+	 habitat type. These alerts serve as a task reminder for zookeepers, spotlighting any unusual
+	 or significant issues. They remain as console notifications until manually cleared via
+	 the menu.</p>
+	
+	<p>Recognizing the potential for enhancements, especially in algorithms and data structures, I
+	 revisited this artifact. The original design provided opportunities for sorting, like arranging
+	 animals by type or alphabetically. The need for improvements in the original code also
+	 presented an appealing challenge after all these years.</p>
+
+	<strong>Course Outcome 2: You DesignED, DevelopED, and DeliverED professional-quality oral, written,
+	 and visual communications that are coherent, technically sound, and appropriately adapted to specific
+	 audiences and contexts by completing the following enhancements</strong>
+	
+	<p>Artifact 2 aligned with quality of communication by comprehensive commenting, including
+	header comments with author, version, date and purpose. Added to this were DocString comments
+	throughout, and clear menu navigation naming and error messaging.</p>
+
+	<strong>Course Outcome 3: You DesignED and EvaluateED computing solutions that solve a given problem using
+	 algorithmic principles and computer science practices and standards appropriate to its solution, while managing
+	 the trade-offs involved in design choices by completing the following enhancements</strong>
+	
+	<p>Artifact 2 aligned with algorithmic principals by completely revamping the oringal mess of a menu into
+	a less complex and more modular design, each module with specific algorithmic purpose, as well as using TimSort
+	as an efficient way to include a structured view of entities for the user. TimSorts worst-case time complexity
+	is O(n log n) which is fine here considering the limit of the zoo's capacity.</p>
+
+	<div class="code">
+            <h3>Original Code</h3>
+            <pre><code>
+package zoomonitoringsystem;
+
+import javax.swing.*;
+
+public class AlertAction {
+    private String details; String detailHead; String alert;
+
+    public AlertAction() {
+        details = ""; detailHead = ""; alert = "";
+    }
+    
+    public void setAlert(String detailGroup, String head, String alerts) {
+        details = detailGroup;
+        detailHead = head;
+        alert = alerts;
+        details = (detailHead + "\n" + details);
+        System.out.println(details);
+        //Display alert prompt box if an alert is present in details var.
+        if (!alert.isEmpty()) {
+            JOptionPane.showMessageDialog(null, alert, "Action Item", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    public String getDetails() {
+        return details;
+    }
+    
+    public String getAlert() {
+        return alert;
+    }
+}
+
+==================================================================================================================
+
+package zoomonitoringsystem;
+
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class ZooMonitoringSystem {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner scnr = new Scanner(System.in);
+       
+        AlertAction alert1 = new AlertAction();
+        
+        //Variables used in this program.
+        char mainSelection = '?';
+        int lineCount = 1, alertPosition = 0;
+        String detailHead = "", detailLine = "", newMenu = "", animal = "";
+        String habitat = "", subMenuPick = "", alert = "", details = "";
+        
+        //Begin the main menu selection process until user terminates.
+        while (mainSelection != 'q') {
+            //Reinitiates strings for looping purposes.
+            newMenu = "";
+            details = "";
+            detailHead = "";
+            alert = "";
+            
+            //Initiate program user prompt.
+            System.out.println("Select from the following menu to monitor zoo "
+                + "conditions.");
+            System.out.println("Select \"a\" for animal, \"h\" for habitat, or "
+                + "\"q\" to exit");
+            //Reads user input.
+            mainSelection = scnr.next().charAt(0);
+            
+            //Begin main menu user choice if/else statements.
+            //Option for animal selection.
+            if (mainSelection == 'a') {
+                System.out.println("You have chosen to view the animal menu.\n");
+                //Opens animal file.
+                File animalFile = new File("src\\zoomonitoringsystem\\"
+                        + "animals.txt");
+                //Reads animal file.
+                Scanner file = new Scanner(animalFile);
+                //Loop to collect data.
+                while (file.hasNextLine()) {
+                    //Collect each line of data from file.
+                    detailLine = file.nextLine();
+                    //Look for dashes in the lines.
+                    if (detailLine.contains("-")) {
+                        //Parse the animal types after the dashes.
+                        animal = detailLine.split("- ")[1];
+                        //Build animal type menu list.
+                        newMenu = newMenu.concat(animal + "\n");
+                    }
+                }   
+                //Add go back option to the animal menu.
+                newMenu = newMenu.concat("Back\n");          
+               
+                //Display submenu list for user selection.
+                System.out.println("Select from the following list: ");
+                System.out.println(newMenu);
+                subMenuPick = scnr.next();
+                //Displays in case user selection is not on the list.
+                if (!newMenu.contains(subMenuPick)) {
+                    System.out.println("Invalid selection");
+                }
+                //Returns to main menu.
+                else if (subMenuPick.equals("Back")) {
+                    System.out.println("");
+                    continue;
+                }
+             
+                //Reread animal file for detail capture.
+                Scanner file2 = new Scanner(animalFile);
+                //Loop through file to read details for animal file.
+                while (file2.hasNextLine()) {
+                    detailLine = file2.nextLine();
+                    //Match detail section with user selection.
+                    //Loop through file section based on detail line quantity.
+                    //Save detail section lines to new variable.
+                    if (detailLine.contains(subMenuPick)) {
+                        lineCount = 1;
+                        while (lineCount <= 4) {
+                            if (detailLine.contains("Animal")) {
+                                detailHead = detailLine;
+                            }
+                            //Search detail lines for alert asterisks.
+                            //Parse out detail line with text only.
+                            //Save detail alert to new variable.
+                            detailLine = file2.nextLine();
+                            details = details.concat(detailLine + "\n");
+                            if (detailLine.contains("*")) {
+                                alertPosition = detailLine.lastIndexOf("*");
+                                alert = detailLine.substring(alertPosition + 1);
+                            }
+                            lineCount++;
+                        }
+                    }
+                }
+            }
+            
+            //Option for habitat selection.
+            else if (mainSelection == 'h') {
+                System.out.println("You have chosen to view the habitat menu.\n");
+                //Opens habitat file.
+                File habitatFile = new File("src\\zoomonitoringsystem\\"
+                        + "habitats.txt");
+                //Reads habitat file.
+                Scanner file3 = new Scanner(habitatFile);
+                
+                //Loop to collect data.
+                while (file3.hasNextLine()) {
+                    //Collect each line of data from file.
+                    detailLine = file3.nextLine();
+                    //Look for dashes in the lines.
+                    if (detailLine.contains("-")) {
+                        //Parse the habitat types after the dashes.
+                        habitat = detailLine.split("- ")[1];
+                        //Build habitat type menu list.
+                        newMenu = newMenu.concat(habitat + "\n");
+                    }
+                }
+                //Add go back option for menu to habitat menu.
+                newMenu = newMenu.concat("Back\n");
+            
+                //Display submenu list for user selection.
+                System.out.println("Select from the following list: ");
+                System.out.println(newMenu);
+                subMenuPick = scnr.next();
+                //Displays in case user selection is not on the list.
+                if (!newMenu.contains(subMenuPick)) {
+                    System.out.println("Invalid selection");
+                }
+                //Returns to main menu.
+                else if (subMenuPick.equals("Back")) {
+                    System.out.println("");
+                    continue;
+                }
+                
+                //Reread animal file for detail capture.
+                Scanner file4 = new Scanner(habitatFile);
+                //Loop through file to read details for habitat file.
+                while (file4.hasNextLine()) {
+                    detailLine = file4.nextLine();
+                    //Match detail section with user selection.
+                    //Loop through file section based on detail line quantity.
+                    //Save detail section lines to new variable.
+                    if (detailLine.contains(subMenuPick)) {
+                        lineCount = 1;
+                        while (lineCount <= 3) {
+                            if (detailLine.contains("Habitat")) {
+                                detailHead = detailLine;
+                            }
+                            //Search detail lines for alert asterisks.
+                            //Parse out detail line without asterisks.
+                            //Save detail alert to new variable.
+                            detailLine = file4.nextLine();
+                            details = details.concat(detailLine + "\n");
+                            if (detailLine.contains("*")) {
+                                alertPosition = detailLine.lastIndexOf("*");
+                                alert = detailLine.substring(alertPosition + 1);
+                            }
+                            lineCount++;
+                        }
+                    }
+                }
+            }
+            
+            //Display in case user selection in main menu is not recognized.
+            else if ((mainSelection != 'a') && (mainSelection != 'h') &&
+                    (mainSelection != 'q')) {
+                System.out.println("Invalid selection\n");
+                continue;
+            }
+            alert1.setAlert(details, detailHead, alert);
+            alert1.getDetails();
+            
+        }
+    }
+}
+
+
+	</code></pre>
+        </div>
+
+	<div class="improvements">
+	    <h3>Code Improvements</h3>
+	    <ul>
+		<li>Refactored into Python from Java.</li>
+		<li>Separation of functionalities into distinct classes and files to allow easier
+		maintenance and scalability.</li>
+		<li>Individual entities (animals and habitats) have their own classes.</li>
+		<li>Better structured and user friendly console menu with user experience in mind
+		for navigation.</li>
+		<li>Creation of a dictionary data structure to keep and call up entity details.</li>
+		<li>Alerts are displayed and maintained in and from the console.</li>
+		<li>Much cleaner, more organized code versus one giant if/else statement menu.</li>
+		<li>Object Oriented Programming and algorthimic principles are much more clear.</li>
+		<li>Much more commenting added with DocStrings and comment headers, including
+		author name, project version, date completed, and purpose of the file.
+	  </ul>
+	</div>
+
+	<div class="code">
+            <h3>Revised Code</h3>
+            <pre><code>
+"""
+    Author: Dave Lewellen
+    Date: 9/23/2023
+    Version: 1.0
+
+    Animal.py
+
+    Defines the Animal class for creating animal objects.
+
+    The Animal class is designed to represent individual animals. It contains attributes such as name, sex, age, and
+    optional attributes like alert_action and food_type. The class also provides a method to display details of the
+    animal.
+
+    This class can be imported and used in other parts of the project to model and manage animal data.
+"""
+
+
+class Animal:
+    def __init__(self, name, sex, age, alert_action=None, food_type=None):
+        """
+        Initialize an Animal object.
+
+        Arguments:
+            name: The name of the animal.
+            sex: The sex of the animal.
+            age: The age of the animal.
+            alert_action: Alerts associated with the animal. Defaults to None.
+            food_type: Type of food the animal consumes. Defaults to None. The animal may not have a specific food type.
+        """
+        self.name = name
+        self.sex = sex
+        self.age = age
+        self.alert_action = alert_action
+        self.food_type = food_type
+
+    def display_details(self):
+        """Display details of the animal."""
+        print(f"Details for {self.name}:")
+        print(f"Sex: {self.sex}")
+        print(f"Age: {self.age}")
+        if self.food_type:
+            print(f"Type of Food: {self.food_type}")
+
+==================================================================================================================================================================\
+
+"""
+    Author: Dave Lewellen
+    Date: 09/23/2023
+    Version: 1.0
+
+    Habitat.py
+
+    Defines the Habitat class to represent individual habitats.
+
+    The Habitat class encapsulates information about a habitat, including its name, temperature, food source,
+    cleanliness, and an optional alert action.
+
+    It also provides a method to display the details of a habitat.
+"""
+
+
+class Habitat:
+    def __init__(self, name, temperature, food_source, cleanliness, alert_action=None):
+        """
+        Initialize a Habitat object.
+
+        Arguments:
+            name: The name of the habitat.
+            temperature: The temperature of the habitat.
+            food_source: Source of food available in the habitat.
+            cleanliness: Cleanliness status of the habitat.
+            alert_action: Alert associated with the habitat. Defaults to None.
+        """
+        self.name = name
+        self.temperature = temperature
+        self.food_source = food_source
+        self.cleanliness = cleanliness
+        self.alert_action = alert_action
+
+    def display_details(self):
+        """Display details of the habitat."""
+        print(f"Details for {self.name}:")
+        print(f"Temperature: {self.temperature}")
+        print(f"Food Source: {self.food_source}")
+        print(f"Cleanliness: {self.cleanliness}")
+
+====================================================================================================================
+
+"""
+    Author: Dave Lewellen
+    Date: 09/23/2023
+    Version: 1.0
+
+    AlertActions.py
+
+    This Python file defines the AlertActions class, which is designed to manage a queue of alerts.
+
+    The class includes methods for adding, displaying, and clearing alerts in the queue.
+"""
+
+
+class AlertActions:
+    def __init__(self):
+        """Initialize an AlertActions."""
+        self.alerts = []
+
+    def show_alerts(self):
+        """Display alerts in the queue."""
+        if self.alerts:
+            print("\n-----------------------")
+            for alert in self.alerts:
+                print(alert)
+            print("-----------------------")
+        else:
+            print("No action items found.")
+
+    def add_alert(self, alert):
+        """
+        Add an alert to the queue.
+
+        Arguments:
+            alert: The alert message to add.
+        """
+        self.alerts.append(alert)
+
+    def clear_alerts(self):
+        """Clear all alerts from the queue."""
+        self.alerts = []
+        print("All alerts cleared.")
+
+====================================================================================================================
+
+"""
+    Author: Dave Lewellen
+    Date: 9/22/2023
+    Version: 1.0
+
+    ZooMonitor.py
+
+    The ZooMonitor class is the central component of the system, managing animals, habitats, and alerts through the
+    implementation of a user interface.
+
+    It provides methods for adding animals and habitats, updating alert actions, viewing details, and interacting with
+    the user.
+
+    The main menu loop allows users to perform various actions, making it the core functionality of the program.
+"""
+
+from Animal import Animal
+from Habitat import Habitat
+from AlertActions import AlertActions
+
+
+class ZooMonitor:
+    def __init__(self):
+        """Initialize the ZooMonitor."""
+        self.animals = {}
+        self.habitats = {}
+        self.alerts = AlertActions()
+
+    def add_animal(self, name, animal):
+        """
+        Add an animal to the manager.
+
+        Arguments:
+            name: The name of the animal.
+            animal: The animal object to add.
+        """
+        self.animals[name] = animal
+
+    def add_habitat(self, name, habitat):
+        """
+        Add a habitat to the manager.
+
+        Arguments:
+            name: The name of the habitat.
+            habitat: The Habitat object to add.
+        """
+        self.habitats[name] = habitat
+
+    def update_alert_action(self, entity_name, new_alert_action, entity_type):
+        """
+        Update the alert action for an entity.
+
+        Arguments:
+            entity_name: The name of the entity to update.
+            new_alert_action: The new alert action.
+            entity_type: Either "animal" or "habitat".
+        """
+        entity_dict = self.animals if entity_type == "animal" else self.habitats
+        entity = entity_dict.get(entity_name)
+        if entity:
+            entity.alert_action = new_alert_action
+            self.alerts.add_alert(f"{entity_type.capitalize()} Alert for {entity_name}: {new_alert_action}")
+            print(f"Alert action updated for {entity_type} {entity_name}.")
+        else:
+            print(f"Error: {entity_type.capitalize()} not found.")
+
+    def view_entity_details(self, entity_name, entity_type):
+        """
+        View details of an entity.
+
+        Arguments:
+            entity_name: The name of the entity to view.
+            entity_type: Either "animal" or "habitat".
+        """
+        entity_dict = self.animals if entity_type == "animal" else self.habitats
+        entity = entity_dict.get(entity_name)
+        if entity:
+            entity.display_details()
+        else:
+            print(f"Error: {entity_type.capitalize()} not found.")
+
+    def list_available_entities(self, entity_type):
+        """
+        List available entities of a given type.
+
+        Arguments:
+            entity_type: Either "animal" or "habitat".
+        """
+        entities_dict = self.animals if entity_type == "animal" else self.habitats
+        entities = entities_dict.keys()
+        if not entities:
+            print(f"No {entity_type}s available.")
+        else:
+            print(f"Available {entity_type.capitalize()}s:")
+            for entity_name in entities:
+                print(f"- {entity_name}")
+
+    def sort_entities(self):
+        """
+        Sort the animals and habitats dictionaries alphabetically by their keys.
+        """
+        self.animals = dict(sorted(self.animals.items()))
+        self.habitats = dict(sorted(self.habitats.items()))
+
+    def main_menu(self):
+        """Display the main menu and handle user choices."""
+        while True:
+            try:
+                # Sort the dictionaries before displaying them
+                self.sort_entities()
+                self.alerts.show_alerts()
+                print("\nMain Menu:")
+                print("1. Update Animal Alert")
+                print("2. Update Habitat Alert")
+                print("3. View Animals")
+                print("4. View Habitats")
+                print("5. Clear All Alerts")
+                print("6. Quit")
+
+                choice = self.get_valid_input("Enter your choice (1-6): ", ['1', '2', '3', '4', '5', '6'])
+
+                if choice == '1':
+                    self.update_entity_alert("animal")
+
+                elif choice == '2':
+                    self.update_entity_alert("habitat")
+
+                elif choice == '3':
+                    self.view_entity_submenu("animal")
+
+                elif choice == '4':
+                    self.view_entity_submenu("habitat")
+
+                elif choice == '5':
+                    self.alerts.clear_alerts()
+                    input("Press Enter to continue...")
+
+                elif choice == '6':
+                    break
+
+                else:
+                    print("Invalid choice. Please select a valid option (1-6).")
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+    def update_entity_alert(self, entity_type):
+        """
+        Update the alert action for an entity type (animal or habitat).
+
+        Arguments:
+            entity_type: Either "animal" or "habitat".
+        """
+        self.list_available_entities(entity_type)
+        name = input(f"Enter the name of the {entity_type} to update: ").strip()
+        new_alert_action = input(f"Enter the new alert action for the {entity_type}: ").strip()
+
+        # Sanitize user input to prevent code injection
+        sanitized_name = ''.join(e for e in name if e.isalnum())
+        sanitized_alert_action = ''.join(e for e in new_alert_action if e.isalnum())
+
+        self.update_alert_action(sanitized_name, sanitized_alert_action, entity_type)
+
+    def view_entity_submenu(self, entity_type):
+        """
+        Display a submenu to view details of entities of a given type.
+
+        Arguments:
+            entity_type: Either "animal" or "habitat".
+        """
+        while True:
+            print(f"\n{entity_type.capitalize()} Submenu:")
+            self.list_available_entities(entity_type)
+            print("R. Return to Main Menu")
+
+            submenu_choice = self.get_valid_input(f"Enter your choice (R to return): ",
+                                                  ['R'] + list(self.animals.keys()) + list(self.habitats.keys()))
+
+            if submenu_choice == 'R':
+                break
+            else:
+                self.view_entity_details(submenu_choice, entity_type)
+
+    @staticmethod
+    def get_valid_input(prompt, valid_options):
+        """
+        Get valid input from the user.
+
+        Arguments:
+            prompt: The input prompt.
+            valid_options: List of valid options.
+
+        Returns:
+            The user's valid input.
+        """
+        while True:
+            input_value = input(prompt).strip()
+            # Sanitize user input to prevent code injection
+            sanitized_input = ''.join(e for e in input_value if e.isalnum())
+            if sanitized_input in valid_options:
+                return sanitized_input
+            else:
+                print("Invalid choice. Please select a valid option.")
+
+
+if __name__ == "__main__":
+    # Create an instance of the ZooMonitor class.
+    manager = ZooMonitor()
+
+    # Create instances of animals and habitats.
+    lion = Animal("Lion", "Male", 5, "Needs a health check", "Carnivore")
+    elephant = Animal("Elephant", "Female", 12, food_type="Herbivore")
+    giraffe = Animal("Giraffe", "Male", 7, "Feeding time", "Herbivore")
+    tiger = Animal("Tiger", "Male", 6, "Needs more exercise", "Carnivore")
+
+    savannah = Habitat("Savannah", "Hot", "Grass", "Clean")
+    jungle = Habitat("Jungle", "Tropical", "Fruits", "Slightly dirty")
+    arctic = Habitat("Arctic", "Cold", "Fish", "Clean")
+
+    # Add animals and habitats to the manager.
+    manager.add_animal("Lion", lion)
+    manager.add_animal("Elephant", elephant)
+    manager.add_animal("Giraffe", giraffe)
+    manager.add_animal("Tiger", tiger)
+
+    manager.add_habitat("Savannah", savannah)
+    manager.add_habitat("Jungle", jungle)
+    manager.add_habitat("Arctic", arctic)
+
+    # Start the main menu to interact with the system.
+    manager.main_menu()
+
+
+	</code></pre>
+	</div>
+    </section>
+
+<!-- Video file link -->
+    <footer>
+        <a href="https://www.youtube.com/watch?v=Izet3t5vFII">Watch My Code Review</a>
+    </footer>
+
+<div class="floating-nav">
+    <button>Sections</button>
+    <div class="nav-list">
+        <ul>
+            <li><a href="index.html">My Professional Journey</a></li>
+            <li><a href="project1.html">Artifact 1</a></li>
+            <li><a href="project2.html">Artifact 2</a></li>
+            <li><a href="project3.html">Artifact 3</a></li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>
